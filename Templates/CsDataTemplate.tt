@@ -1,0 +1,91 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+using System.Collections.Generic;
+using VRageMath;
+using VRage;
+
+namespace DarkHelmet
+{
+    using AtlasMembers = MyTuple<string, Vector2>;
+    using GlyphMembers = MyTuple<int, Vector2, Vector2, float, float>;
+
+    namespace UI
+    {
+        using FontStyleMembers = MyTuple<
+			int, // styleID
+			float, // height
+			float, // baseline
+			AtlasMembers[], // atlases
+			KeyValuePair<char, GlyphMembers>[], // glyphs
+			KeyValuePair<uint, float>[] // kernings
+		>;
+
+        namespace FontData
+        {
+            using FontMembers = MyTuple<
+                string, // Name
+                float, // PtSize
+                FontStyleMembers[] // styles
+            >;
+
+			public static class <#= form.CustomFontName #>
+			{
+				public static FontMembers GetFontData()
+				{
+					FontStyleMembers[] styles = new FontStyleMembers[4];
+<#				foreach (FontData style in styles) // Add styles to Font
+				{ #>
+					styles[<#= style.styleId #>] = Get<#= $"{form.CustomFontName}{style.styleId}" #>();
+<#				} #>
+
+					return new FontMembers(<#= $"\"{form.CustomFontName}\", {form.SelectedFont.SizeInPoints}f" #>, styles);
+				}
+<#		 foreach (FontData style in styles) // Font Styles
+			{ #>
+
+				private static FontStyleMembers Get<#= $"{form.CustomFontName}{style.styleId}" #>()
+				{
+					AtlasMembers[] fontAtlases = new AtlasMembers[<#= style.BmData.bitmaps.Length #>];
+<#  
+					foreach (BitmapData bmp in style.BmData.bitmaps) 
+					{		
+						Vector2 size = BmGenData.ParseVector(bmp.size); 
+#>
+					fontAtlases[<#= bmp.id #>] = new AtlasMembers(<#= $"\"{form.CustomFontName}-{style.styleId}-{bmp.id}\"" #>, new Vector2(<#= $"{size.X}f, {size.Y}f" #>));
+<#					} #>
+
+					KeyValuePair<char, GlyphMembers>[] glyphs = new KeyValuePair<char, GlyphMembers>[<#= style.BmData.glyphs.Length #>] 
+					{ 
+<#					foreach (GlyphData glyph in style.BmData.glyphs) // Style Glyphs
+					{ 
+						Vector2 origin = BmGenData.ParseVector(glyph.origin), size = BmGenData.ParseVector(glyph.size);
+						string charValue = ((int)glyph.ch[0]).ToString("X4"),
+							glyphValue = $"new GlyphMembers({glyph.bitmapID}, new Vector2({size.X}f, {size.Y}f), new Vector2({origin.X}f, {origin.Y}f), {glyph.advanceWidth}f, {glyph.leftSideBearing}f)"; 
+#>
+						new KeyValuePair<char, GlyphMembers>((char)0x<#= $"{charValue}, {glyphValue}" #>),
+<#					} #>
+					};
+
+					KeyValuePair<uint, float>[] kerningPairs = new KeyValuePair<uint, float>[<#= style.BmData.kernPairs != null ? style.BmData.kernPairs.Length : 0 #>] 
+					{
+<#				if (style.BmData.kernPairs != null)
+				{
+					foreach (KerningPairData kernPair in style.BmData.kernPairs) // Kernings
+					{
+						uint kernValue = kernPair.left[0] + (uint)(kernPair.right[0] << 16); 
+#>
+						new KeyValuePair<uint, float>(<#= $"{kernValue}, {kernPair.adjust}f" #>),
+<#					}
+				}#>
+					};
+
+					return new FontStyleMembers(<#= $"{style.styleId}, {style.BmData.height}f, {style.BmData.baseline}f" #>, fontAtlases, glyphs, kerningPairs);
+				}
+<#			} #>
+			}
+		}
+	}
+}

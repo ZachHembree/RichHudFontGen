@@ -1,0 +1,35 @@
+-range 0020-02ff
+-range 2000-2043
+-range 2045-20ff
+-range 2122-2122
+-range 2212-2212
+-range 2219-2219
+-range 0400-04FF
+-range 25A1-25A1
+-range E001-E021
+-custom E001 Controller/A.png 0 0 39 39 34 40 0 true
+-custom E002 Controller/X.png 0 0 39 39 34 40 0 true
+-custom E003 Controller/B.png 0 0 39 39 34 40 0 true
+-custom E004 Controller/Y.png 0 0 39 39 34 40 0 true
+-custom E005 Controller/LB.png 0 0 39 39 34 41 0 true
+-custom E006 Controller/RB.png 0 0 39 39 34 41 0 true
+-custom E007 Controller/RT.png 0 0 39 39 34 32 0 true
+-custom E008 Controller/LT.png 0 0 39 39 34 32 0 true
+-custom E009 Controller/LS.png 0 0 39 39 34 40 0 true
+-custom E00A Controller/RS.png 0 0 39 39 34 40 0 true
+-custom E00B Controller/L3.png 0 0 39 39 34 34 0 true
+-custom E00C Controller/R3.png 0 0 39 39 34 34 0 true
+-custom E00D Controller/BACK.png 0 0 39 39 34 40 0 true
+-custom E00E Controller/START.png 0 0 39 39 34 40 0 true
+-custom E00F Controller/DPAD.png 0 0 39 39 34 40 0 true
+-custom E010 Controller/DPADLEFT.png 0 0 39 39 34 41 0 true
+-custom E011 Controller/DPADUP.png 0 0 39 39 34 32 0 true
+-custom E012 Controller/DPADRIGHT.png 0 0 39 39 34 41 0 true
+-custom E013 Controller/DPADDOWN.png 0 0 39 39 34 32 0 true
+-custom E014 Controller/LS_DOWN.png 0 0 39 39 34 40 0 true
+-custom E015 Controller/LS_LEFT.png 0 0 39 39 34 40 0 true
+-custom E016 Controller/LS_RIGHT.png 0 0 39 39 34 40 0 true
+-custom E017 Controller/LS_UP.png 0 0 39 39 34 40 0 true
+-custom E018 Controller/RS_DOWN.png 0 0 39 39 34 40 0 true
+-custom E019 Controller/RS_LEFT.png 0 0 39 39 34 40 0 true
+-custom E020 Controller/RS_RIGHT.png 0 0 39 39 34 40 0 true
