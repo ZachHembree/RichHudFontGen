@@ -77,6 +77,9 @@ namespace HudLibFontGen
         private void CheckBoxUseName_CheckedChanged(object sender, EventArgs e) =>
             nameBox.Enabled = checkBoxUseName.Checked;
 
+        private void modNameBox_TextChanged(object sender, EventArgs e)
+        { }
+
         /// <summary>
         /// Updates font style to reflect configuration specified by the UI.
         /// </summary>
@@ -198,8 +201,16 @@ namespace HudLibFontGen
                 richConsoleBox.ScrollToCaret();
             }
 
+            string modName = modNameBox.Text;
+
+            if (modName.Length == 0)
+                modName = "ModName";
+
+            richConsoleBox.AppendText($"Using mod name: {modName}\n");
+            richConsoleBox.ScrollToCaret();
+
             WriteSbcData(data, $"{CustomFontName}\\Data");
-            WriteCsData(data, $"{CustomFontName}\\Data\\Scripts\\ModName\\FontData");
+            WriteCsData(data, $"{CustomFontName}\\Data\\Scripts\\{modName}\\FontData");
             MoveAtlases(data, $"{CustomFontName}\\Fonts\\{CustomFontName}");
             ConvertAtlases(data, $"{CustomFontName}\\Fonts\\{CustomFontName}");
         }
@@ -213,8 +224,7 @@ namespace HudLibFontGen
             List<FontData> styles = new List<FontData>();
             Vector2
                 padding = GetPadding(paddingBox1X, paddingBox1Y),
-                offsetB = GetPadding(paddingBox2X, paddingBox2Y),
-                offsetI = GetPadding(paddingBox3X, paddingBox3Y);
+                offsetB = GetPadding(paddingBox2X, paddingBox2Y);
 
             for (int n = 0; n < 4; n++)
             {
@@ -224,9 +234,6 @@ namespace HudLibFontGen
 
                     if ((n & 1) == 1)
                         offset += offsetB;
-
-                    if ((n & 2) == 2)
-                        offset += offsetI;
 
                     styles.Add(new FontData(this, padding + offset, n));
                 }
