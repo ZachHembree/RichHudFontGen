@@ -18,7 +18,7 @@ namespace HudLibFontGen.Templates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+    #line 1 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class CsDataTemplate : CsDataTemplateBase
     {
@@ -32,7 +32,7 @@ namespace HudLibFontGen.Templates
 using VRageMath;
 using VRage;
 
-namespace DarkHelmet
+namespace RichHudFramework
 {
     using AtlasMembers = MyTuple<string, Vector2>;
     using GlyphMembers = MyTuple<int, Vector2, Vector2, float, float>;
@@ -58,15 +58,15 @@ namespace DarkHelmet
 
 			public static class ");
             
-            #line 34 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 34 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(form.CustomFontName));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t{\r\n\t\t\t\tpublic static FontMembers GetFontData()\r\n\t\t\t\t{\r\n\t\t\t\t\tFontStyleMembers" +
-                    "[] styles = new FontStyleMembers[4];\r\n");
+                    "[] styles = new FontStyleMembers[2];\r\n");
             
-            #line 39 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 39 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 				foreach (FontData style in styles) // Add styles to Font
 				{ 
             
@@ -74,35 +74,35 @@ namespace DarkHelmet
             #line hidden
             this.Write("\t\t\t\t\tstyles[");
             
-            #line 41 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 41 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(style.styleId));
             
             #line default
             #line hidden
             this.Write("] = Get");
             
-            #line 41 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 41 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"{form.CustomFontName}{style.styleId}"));
             
             #line default
             #line hidden
             this.Write("();\r\n");
             
-            #line 42 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 42 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 				} 
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t\t\treturn new FontMembers(");
             
-            #line 44 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 44 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"\"{form.CustomFontName}\", {form.SelectedFont.SizeInPoints}f"));
             
             #line default
             #line hidden
             this.Write(", styles);\r\n\t\t\t\t}\r\n");
             
-            #line 46 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 46 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 		 foreach (FontData style in styles) // Font Styles
 			{ 
             
@@ -110,21 +110,21 @@ namespace DarkHelmet
             #line hidden
             this.Write("\r\n\t\t\t\tprivate static FontStyleMembers Get");
             
-            #line 49 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 49 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"{form.CustomFontName}{style.styleId}"));
             
             #line default
             #line hidden
             this.Write("()\r\n\t\t\t\t{\r\n\t\t\t\t\tAtlasMembers[] fontAtlases = new AtlasMembers[");
             
-            #line 51 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 51 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(style.BmData.bitmaps.Length));
             
             #line default
             #line hidden
             this.Write("];\r\n");
             
-            #line 52 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 52 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
   
 					foreach (BitmapData bmp in style.BmData.bitmaps) 
 					{		
@@ -135,28 +135,28 @@ namespace DarkHelmet
             #line hidden
             this.Write("\t\t\t\t\tfontAtlases[");
             
-            #line 57 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 57 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(bmp.id));
             
             #line default
             #line hidden
             this.Write("] = new AtlasMembers(");
             
-            #line 57 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 57 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"\"{form.CustomFontName}-{style.styleId}-{bmp.id}\""));
             
             #line default
             #line hidden
             this.Write(", new Vector2(");
             
-            #line 57 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 57 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"{size.X}f, {size.Y}f"));
             
             #line default
             #line hidden
             this.Write("));\r\n");
             
-            #line 58 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 58 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 					} 
             
             #line default
@@ -164,14 +164,14 @@ namespace DarkHelmet
             this.Write("\r\n\t\t\t\t\tKeyValuePair<char, GlyphMembers>[] glyphs = new KeyValuePair<char, GlyphMe" +
                     "mbers>[");
             
-            #line 60 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 60 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(style.BmData.glyphs.Length));
             
             #line default
             #line hidden
             this.Write("] \r\n\t\t\t\t\t{ \r\n");
             
-            #line 62 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 62 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 					foreach (GlyphData glyph in style.BmData.glyphs) // Style Glyphs
 					{ 
 						Vector2 origin = BmGenData.ParseVector(glyph.origin), size = BmGenData.ParseVector(glyph.size);
@@ -183,14 +183,14 @@ namespace DarkHelmet
             #line hidden
             this.Write("\t\t\t\t\t\tnew KeyValuePair<char, GlyphMembers>((char)0x");
             
-            #line 68 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 68 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"{charValue}, {glyphValue}"));
             
             #line default
             #line hidden
             this.Write("),\r\n");
             
-            #line 69 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 69 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 					} 
             
             #line default
@@ -198,14 +198,14 @@ namespace DarkHelmet
             this.Write("\t\t\t\t\t};\r\n\r\n\t\t\t\t\tKeyValuePair<uint, float>[] kerningPairs = new KeyValuePair<uint," +
                     " float>[");
             
-            #line 72 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 72 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(style.BmData.kernPairs != null ? style.BmData.kernPairs.Length : 0));
             
             #line default
             #line hidden
             this.Write("] \r\n\t\t\t\t\t{\r\n");
             
-            #line 74 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 74 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 				if (style.BmData.kernPairs != null)
 				{
 					foreach (KerningPairData kernPair in style.BmData.kernPairs) // Kernings
@@ -217,14 +217,14 @@ namespace DarkHelmet
             #line hidden
             this.Write("\t\t\t\t\t\tnew KeyValuePair<uint, float>(");
             
-            #line 80 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 80 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"{kernValue}, {kernPair.adjust}f"));
             
             #line default
             #line hidden
             this.Write("),\r\n");
             
-            #line 81 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 81 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 					}
 				}
             
@@ -232,14 +232,14 @@ namespace DarkHelmet
             #line hidden
             this.Write("\t\t\t\t\t};\r\n\r\n\t\t\t\t\treturn new FontStyleMembers(");
             
-            #line 85 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 85 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture($"{style.styleId}, {style.BmData.height}f, {style.BmData.baseline}f"));
             
             #line default
             #line hidden
             this.Write(", fontAtlases, glyphs, kerningPairs);\r\n\t\t\t\t}\r\n");
             
-            #line 87 "C:\Users\Zach2\source\repos\HudLibFontGen\Templates\CsDataTemplate.tt"
+            #line 87 "C:\Users\zhemb\source\repos\RichHudFontGen\Templates\CsDataTemplate.tt"
 			} 
             
             #line default

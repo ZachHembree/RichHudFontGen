@@ -11,20 +11,41 @@ namespace HudLibFontGen
 {
     public partial class FontGenForm : Form
     {
+        /// <summary>
+        /// Font last selected in the font dialog
+        /// </summary>
         public Font SelectedFont { get; private set; }
+
+        /// <summary>
+        /// Font styles to be generated
+        /// </summary>
         public int StyleCfg { get; private set; }
+
+        /// <summary>
+        /// Font name to be used specified by the user
+        /// </summary>
         public string CustomFontName { get; private set; }
+
         public string WorkingDir { get; private set; }
+
         public string ParentDir { get; private set; }
+
+        /// <summary>
+        /// Directory where BmFontGen was found
+        /// </summary>
         public string BmGenDir { get; private set; }
+
+        /// <summary>
+        /// Directory where DirectXTex Texconv was found
+        /// </summary>
         public string XTexDir { get; private set; }
 
         public FontGenForm()
         {
-            InitializeComponent();
+            InitializeComponent(); // Form init
 
             WorkingDir = Directory.GetCurrentDirectory();
-            ParentDir = Directory.GetParent(WorkingDir).FullName;
+            ParentDir = Directory.GetParent(Directory.GetParent(WorkingDir).FullName).FullName;
 
             BmGenDir = $"{ParentDir}\\Fonts\\BMFontGen";
             XTexDir = $"{ParentDir}\\TexturePacking\\Tools"; // requires vccredist2013_x86
@@ -44,29 +65,35 @@ namespace HudLibFontGen
             }
         }
 
+        /// <summary>
+        /// If bold is checked/unchecked, update the style configuration
+        /// </summary>
         private void CheckBoxBold_CheckedChanged(object sender, EventArgs e) =>
             UpdateStyleCfg();
 
-        private void CheckBoxItalic_CheckedChanged(object sender, EventArgs e) =>
-            UpdateStyleCfg();
-
+        /// <summary>
+        /// Toggle custom name use
+        /// </summary>
         private void CheckBoxUseName_CheckedChanged(object sender, EventArgs e) =>
             nameBox.Enabled = checkBoxUseName.Checked;
 
+        /// <summary>
+        /// Updates font style to reflect configuration specified by the UI.
+        /// </summary>
         private void UpdateStyleCfg()
         {
             StyleCfg = 0;
 
             if (checkBoxBold.Checked)
                 StyleCfg += 1;
-
-            if (checkBoxItalic.Checked)
-                StyleCfg += 2;
         }
 
-        private void Start_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Start font generation
+        /// </summary>
+        private void Start_Click(object sender, EventArgs args)
         {
-            if (Enabled)
+            if (Enabled) // if the menu is enabled
             {
                 if (SelectedFont != null)
                 {
@@ -74,9 +101,21 @@ namespace HudLibFontGen
                     {
                         Enabled = false;
                         ResetHeader();
-
                         richConsoleBox.AppendRichText($"Generating Font Data...\n", FontStyle.Bold);
-                        GenerateFontData();
+
+                        try
+                        {
+                            GenerateFontData();
+                            richConsoleBox.AppendRichText($"\nFont Data Generation Complete.", FontStyle.Bold);
+                        }
+                        catch (Exception e)
+                        {
+                            richConsoleBox.AppendRichText($"\nFont Data Generation Failed.\n", FontStyle.Bold, Color.DarkRed);
+                            richConsoleBox.AppendText($"Reason: {e.Message}\n");
+                        }
+
+                        richConsoleBox.ScrollToCaret();
+                        Enabled = true;
                     }
                 }
                 else
@@ -87,6 +126,10 @@ namespace HudLibFontGen
             }
         }
 
+        /// <summary>
+        /// Confirms that DirectXTex and BmFontGen are present and notifies the user if they aren't.
+        /// </summary>
+        /// <returns></returns>
         private bool CheckDependencies()
         {
             bool xTexFound = File.Exists($"{XTexDir}\\texconv.exe"), bmGenFound = File.Exists($"{BmGenDir}\\bmfontgen.exe");
@@ -101,6 +144,9 @@ namespace HudLibFontGen
             return xTexFound && bmGenFound;
         }
 
+        /// <summary>
+        /// Clear console readout and write a new header displaying the current font selection
+        /// </summary>
         private void ResetHeader()
         {
             richConsoleBox.Clear();
@@ -110,6 +156,7 @@ namespace HudLibFontGen
 
         private void GenerateFontData()
         {
+            // If a custom name is enabled and one is set, use it in place of the font name
             if (nameBox.Enabled && nameBox.Text != null && nameBox.Text.Length > 0)
                 CustomFontName = nameBox.Text.RemoveSpaces();
             else
@@ -117,6 +164,7 @@ namespace HudLibFontGen
 
             Directory.CreateDirectory(CustomFontName);
             List<FontData> data = GetFontStyles();
+            bool success = true;
 
             foreach (FontData style in data)
             {
@@ -133,10 +181,18 @@ namespace HudLibFontGen
 
                 richConsoleBox.AppendText($"Generating Font Data for Style {styleName} ({style.styleId})...\n");
 
-                if (checkBoxVerboseOutput.Checked)
+                if (style.BmData == null)
+                    success = false;
+
+                if (checkBoxVerboseOutput.Checked || !success)
                 {
                     richConsoleBox.AppendRichText($"\n[Style: {style.styleId}] BmGen Console Output:\n", FontStyle.Bold);
                     richConsoleBox.AppendText(style.ConsoleOutput + "\n");
+                }
+
+                if (!success)
+                {
+                    throw new Exception("Unable to retrieve font data.");
                 }
 
                 richConsoleBox.ScrollToCaret();
@@ -146,13 +202,12 @@ namespace HudLibFontGen
             WriteCsData(data, $"{CustomFontName}\\Data\\Scripts\\ModName\\FontData");
             MoveAtlases(data, $"{CustomFontName}\\Fonts\\{CustomFontName}");
             ConvertAtlases(data, $"{CustomFontName}\\Fonts\\{CustomFontName}");
-
-            richConsoleBox.AppendRichText($"\nFont Data Generation Complete.", FontStyle.Bold);
-            richConsoleBox.ScrollToCaret();
-
-            Enabled = true;
         }
 
+        /// <summary>
+        /// Generates atlases and glyph data for each of the styles selected using the padding
+        /// specified by the UI.
+        /// </summary>
         private List<FontData> GetFontStyles()
         {
             List<FontData> styles = new List<FontData>();
@@ -180,6 +235,9 @@ namespace HudLibFontGen
             return styles;
         }
 
+        /// <summary>
+        /// Parses text from padding textboxes into Vector2's
+        /// </summary>
         private Vector2 GetPadding(TextBox X, TextBox Y)
         {
             return new Vector2()
@@ -189,6 +247,10 @@ namespace HudLibFontGen
             };
         }
 
+        /// <summary>
+        /// Converts parsed XML data from <see cref="FontData"/> into a CS representation using
+        /// a code generation template.
+        /// </summary>
         private void WriteCsData(List<FontData> styles, string localPath)
         {
             Directory.CreateDirectory($"{WorkingDir}\\{localPath}");
@@ -200,8 +262,11 @@ namespace HudLibFontGen
             }
         }
 
+        /// <summary>
+        /// Generates texture resource files in XML for the generated atlases.
+        /// </summary>
         private void WriteSbcData(List<FontData> styles, string localPath)
-        {
+        {  
             Directory.CreateDirectory($"{WorkingDir}\\{localPath}\\FontResources");
             MatSbcTemplate sbcData = new MatSbcTemplate(this, styles);
 
@@ -219,20 +284,32 @@ namespace HudLibFontGen
             {
                 foreach (BitmapData bmp in style.BmData.bitmaps)
                 {
-                    string dest = $"{WorkingDir}\\{localPath}\\{CustomFontName}-{style.styleId}-{bmp.id}.png";
+                    string destDir = $"{WorkingDir}\\{localPath}\\{CustomFontName}-{style.styleId}-{bmp.id}.png",
+                        currentDir = $"{WorkingDir}\\{CustomFontName}\\{CustomFontName}-{style.styleId}-{bmp.id}.png";
 
-                    if (File.Exists(dest))
-                        File.Delete(dest);
+                    if (File.Exists(currentDir))
+                    {
+                        if (File.Exists(destDir))
+                            File.Delete(destDir);
 
-                    File.Move($"{WorkingDir}\\{CustomFontName}\\{CustomFontName}-{style.styleId}-{bmp.id}.png", dest);
+                        File.Move(currentDir, destDir);
+                    }
+                    else
+                    {
+                        throw new Exception($"Couldn't find font atlas at: {destDir}.");
+                    }
                 }
             }
         }
 
+        /// <summary>
+        /// Converts the PNG atlases generated by BmFontGen into BC7 
+        /// </summary>
         private void ConvertAtlases(List<FontData> data, string localPath)
         {
             Process xtex = new Process();
             string consoleOutput = "";
+            bool success = true;
 
             richConsoleBox.AppendRichText($"\nStarting Texture Conversion...\n", FontStyle.Bold);
 
@@ -256,22 +333,39 @@ namespace HudLibFontGen
                 {
                     string file = $"{WorkingDir}\\{localPath}\\{CustomFontName}-{style.styleId}-{bmp.id}";
 
-                    File.Move($"{file}.DDS", $"{file}.dds");
+                    if (File.Exists($"{file}.DDS") && File.Exists($"{file}.png"))
+                    {
+                        File.Move($"{file}.DDS", $"{file}.dds");
 
-                    if (!checkBoxKeepPng.Checked && File.Exists($"{file}.png"))
-                        File.Delete($"{file}.png");                    
+                        if (!checkBoxKeepPng.Checked)
+                            File.Delete($"{file}.png");
+                    }
+                    else
+                    {
+                        success = false;
+                        break;
+                    }
                 }
+
+                if (!success)
+                    break;
             }
 
-            if (checkBoxVerboseOutput.Checked)
+            if (checkBoxVerboseOutput.Checked || !success)
             {
                 richConsoleBox.AppendRichText($"\nxTex Console Output:\n", FontStyle.Bold);
                 richConsoleBox.AppendText(consoleOutput + "\n");
                 richConsoleBox.ScrollToCaret();
             }
+
+            if (!success)
+                throw new Exception("Texture conversion failed.");
         }
     }
 
+    /// <summary>
+    /// Utility extensions
+    /// </summary>
     public static class Extensions
     {
         public static void AppendRichText(this RichTextBox textBox, string text, FontStyle style)
