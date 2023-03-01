@@ -8,3 +8,5 @@ DirectXTex Texconv requires you to have the x86 version of [Visual C++ Redistrib
 
 ## Usage
 Once installed, it's pretty straightforward. Run the application, click "Select Font," select the font you want and the size to render at, then click apply, close the dialog and click "Generate Font Data." For information on integrating the resulting resource files into a mod and registering it with the framework, see the [wiki](https://github.com/ZachHembree/RichHudFramework.Client/wiki).
+
+Custom character ranges can be specified via the range.txt file in RichHudFontGen/Options using their hexadecimal unicode representation. The extendedRange.txt file contains the ranges of Latin, Cyrillic and CJK characters used by Space Engineer's offical localizations.
